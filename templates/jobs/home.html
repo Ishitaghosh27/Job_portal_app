@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}JobConnect – Find Your Dream Job{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Find Your Dream Job</h1>
+    <p>Discover thousands of opportunities from top employers. Whether you're a candidate or an employer, JobConnect has
+        you covered.</p>
+    <form method="GET" action="{% url 'home' %}" class="search-bar">
+        <input type="text" name="q" placeholder="Search jobs by title..." value="{{ query }}">
+        <button type="submit"><i class="fas fa-search"></i> Search</button>
+    </form>
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="number">{{ job_count }}</div>
+            <div class="label">Jobs Posted</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number"><i class="fas fa-building"></i></div>
+            <div class="label">Top Employers</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number"><i class="fas fa-globe"></i></div>
+            <div class="label">Remote Friendly</div>
+        </div>
+    </div>
+</div>
+
+<h2 class="section-title"><i class="fas fa-fire"></i> Latest Job Openings</h2>
+
+{% if jobs %}
+<div class="job-grid">
+    {% for job in jobs %}
+    <div class="job-card">
+        <h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+        <div class="job-meta">
+            <span><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
+            {% if job.salary %}
+            <span><i class="fas fa-money-bill-wave"></i> {{ job.salary }}</span>
+            {% endif %}
+            <span><i class="fas fa-clock"></i> {{ job.date_posted|timesince }} ago</span>
+        </div>
+        <p class="job-description">{{ job.description }}</p>
+        <div class="job-footer">
+            <span class="employer-tag"><i class="fas fa-building"></i> {{ job.employer.username }}</span>
+            <a href="{% url 'job_detail' job.pk %}" class="btn btn-primary btn-sm">
+                View Details <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-search"></i>
+    <h3>No jobs found</h3>
+    <p>{% if query %}No jobs match "{{ query }}". Try a different search term.{% else %}No jobs have been posted yet.
+        Check back later!{% endif %}</p>
+</div>
+{% endif %}
+{% endblock %}

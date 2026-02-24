@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Candidate Dashboard – JobConnect{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1><i class="fas fa-tachometer-alt"></i> Candidate Dashboard</h1>
+    <p>Welcome back, <strong>{{ user.username }}</strong>! Track your job applications below.</p>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="stat-number">{{ applications.count }}</div>
+        <div class="stat-label">Applications Sent</div>
+    </div>
+</div>
+
+<h2 class="section-title"><i class="fas fa-file-alt"></i> Your Applications</h2>
+
+{% if applications %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Applied</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td><a href="{% url 'job_detail' app.job.pk %}"><strong>{{ app.job.title }}</strong></a></td>
+                <td>{{ app.job.employer.username }}</td>
+                <td>{{ app.job.location }}</td>
+                <td>{{ app.date_applied|timesince }} ago</td>
+                <td>
+                    <a href="{% url 'job_detail' app.job.pk %}" class="btn btn-outline btn-sm">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-file-alt"></i>
+    <h3>No applications yet</h3>
+    <p>Start browsing available jobs and apply to your favorites.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">
+        <i class="fas fa-search"></i> Browse Jobs
+    </a>
+</div>
+{% endif %}
+{% endblock %}

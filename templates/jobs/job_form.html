@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} – JobConnect{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2><i class="fas fa-briefcase"></i> {{ title }}</h2>
+    <p class="subtitle">Fill in the details below to {% if 'Update' in title %}update{% else %}create{% endif %} a job
+        listing</p>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <span class="helptext">{{ field.help_text }}</span>
+            {% endif %}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> {% if 'Update' in title %}Update Job{% else %}Post Job{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

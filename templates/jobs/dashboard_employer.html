@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Employer Dashboard – JobConnect{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1><i class="fas fa-tachometer-alt"></i> Employer Dashboard</h1>
+    <p>Welcome back, <strong>{{ user.username }}</strong>! Manage your job postings below.</p>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="stat-number">{{ jobs.count }}</div>
+        <div class="stat-label">Jobs Posted</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ total_applications }}</div>
+        <div class="stat-label">Total Applications</div>
+    </div>
+</div>
+
+<div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h2 class="section-title" style="margin-bottom:0;"><i class="fas fa-briefcase"></i> Your Job Postings</h2>
+    <a href="{% url 'create_job' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Post New Job
+    </a>
+</div>
+
+{% if jobs %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Applications</th>
+                <th>Posted</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr>
+                <td><a href="{% url 'job_detail' job.pk %}"><strong>{{ job.title }}</strong></a></td>
+                <td>{{ job.location }}</td>
+                <td>{{ job.applications.count }}</td>
+                <td>{{ job.date_posted|timesince }} ago</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'update_job' job.pk %}" class="btn btn-outline btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_job' job.pk %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-briefcase"></i>
+    <h3>No jobs posted yet</h3>
+    <p>Start by creating your first job listing.</p>
+    <a href="{% url 'create_job' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Post Your First Job
+    </a>
+</div>
+{% endif %}
+{% endblock %}

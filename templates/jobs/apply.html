@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply – {{ job.title }} – JobConnect{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2><i class="fas fa-paper-plane"></i> Apply for Job</h2>
+    <p class="subtitle">Applying for: <strong>{{ job.title }}</strong></p>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <span class="helptext">{{ field.help_text }}</span>
+            {% endif %}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-paper-plane"></i> Submit Application
+            </button>
+        </div>
+    </form>
+    <div class="form-footer">
+        <a href="{% url 'job_detail' job.pk %}"><i class="fas fa-arrow-left"></i> Back to Job</a>
+    </div>
+</div>
+{% endblock %}

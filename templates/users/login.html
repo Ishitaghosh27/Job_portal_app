@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Login – JobConnect{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
+    <p class="subtitle">Sign in to your JobConnect account</p>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </div>
+    </form>
+    <div class="form-footer">
+        Don't have an account? <a href="{% url 'register' %}">Register now</a>
+    </div>
+</div>
+{% endblock %}

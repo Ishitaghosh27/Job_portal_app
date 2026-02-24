@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} – JobConnect{% endblock %}
+
+{% block content %}
+<div class="job-detail">
+    <h1>{{ job.title }}</h1>
+    <div class="job-detail-meta">
+        <span><i class="fas fa-building"></i> {{ job.employer.username }}</span>
+        <span><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
+        {% if job.salary %}
+        <span><i class="fas fa-money-bill-wave"></i> {{ job.salary }}</span>
+        {% endif %}
+        <span><i class="fas fa-calendar-alt"></i> Posted {{ job.date_posted|timesince }} ago</span>
+    </div>
+
+    <div class="description">
+        {{ job.description }}
+    </div>
+
+    <div class="job-detail-actions">
+        <div class="btn-group">
+            {% if user.is_authenticated %}
+            {% if user.user_type == 'candidate' %}
+            {% if has_applied %}
+            <span class="btn btn-outline" style="cursor: default;">
+                <i class="fas fa-check-circle"></i> Already Applied
+            </span>
+            {% else %}
+            <a href="{% url 'apply_job' job.pk %}" class="btn btn-success">
+                <i class="fas fa-paper-plane"></i> Apply Now
+            </a>
+            {% endif %}
+            {% endif %}
+            {% if user == job.employer %}
+            <a href="{% url 'update_job' job.pk %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit Job
+            </a>
+            <a href="{% url 'delete_job' job.pk %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete Job
+            </a>
+            {% endif %}
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Login to Apply
+            </a>
+            {% endif %}
+            <a href="{% url 'home' %}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Jobs
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if user == job.employer and job.applications.all %}
+<div style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-users"></i> Applications ({{ job.applications.count }})</h2>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Cover Letter</th>
+                    <th>Resume</th>
+                    <th>Applied</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in job.applications.all %}
+                <tr>
+                    <td><strong>{{ app.candidate.username }}</strong></td>
+                    <td>{{ app.cover_letter|truncatewords:20 }}</td>
+                    <td>
+                        {% if app.resume %}
+                        <a href="{{ app.resume.url }}" class="btn btn-outline btn-sm" target="_blank">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        {% else %}
+                        <span style="color: var(--text-muted);">—</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ app.date_applied|timesince }} ago</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
