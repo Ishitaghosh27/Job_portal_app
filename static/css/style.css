@@ -60,8 +60,8 @@ a:hover {
 /* ============= NAVBAR ============= */
 .navbar {
     background: rgba(15, 15, 35, 0.85);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
@@ -374,6 +374,7 @@ a:hover {
     margin-bottom: 1.2rem;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -923,4 +924,42 @@ a:hover {
     .dashboard-stats {
         grid-template-columns: 1fr 1fr;
     }
+}
+
+/* ============= UTILITY CLASSES ============= */
+.inline-form {
+    display: inline;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
+}
+
+.justify-center {
+    justify-content: center !important;
+}
+
+.cursor-default {
+    cursor: default !important;
+}
+
+.mt-2 {
+    margin-top: 2rem !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.sign-out-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
 }
